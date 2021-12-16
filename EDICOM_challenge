@@ -1,0 +1,64 @@
+/** Carrying out a calculation that counts the number of lines in which 3 and / or 4 identical characters appear. 
+* The result will be the difference between these two numbers. 
+*
+* @author Nerea Mañez
+*/
+
+public static void main(String[] args) {
+    String[] lines = {"bbcbcccd","abbbccde","aaaabbcd","aaabcccd","aaaabbbb","abcccdcc","abababcc"};
+    String aux ="";
+    int count3 =0,count4=0;
+    boolean have3,have4;
+    for (int i=0;i<lines.length;i++) {
+        have3=false;
+        have4=false;
+        aux = extractLetters(lines[i],0,"");
+        for (int j=0;j<aux.length();j++) {
+            if (countLetters(lines[i],0,aux.charAt(j))==3)
+                have3=true;
+            else if (countLetters(lines[i],0,aux.charAt(j))==4)
+                have4=true;
+        }
+        if (have3)
+            count3++;
+        if (have4)
+            count4++;
+    }
+
+    int result = Math.max(count3,count4)-Math.min(count3,count4);
+
+    System.out.println("The result is " + Math.max(count3,count4) + " - " + Math.min(count3,count4) + " = " + result);
+}
+
+/**
+ * Count how many times apears the same letter
+ *
+ * @param line word in which we are searching
+ * @param counter number of times that apears the letter
+ * @param letter character to find
+ * @return counter as the number of times that letter apears
+ */
+public static int countLetters(String line,int counter,char letter){
+    if (line.length()==0) return counter;
+    if (line.charAt(0)==letter)
+        return countLetters(line.substring(1),counter+1,letter);
+    else
+        return countLetters(line.substring(1),counter,letter);
+}
+
+/**
+ * Extract the different letters
+ *
+ * @param line word in which we are searching for different letters
+ * @param index the search position
+ * @param result the different letters that we found
+ * @return result
+ */
+public static String extractLetters(String line, int index,String result){
+    if (line.length()<=0) return line;
+    if (line.length()>index) return line;
+    if (line.toUpperCase().charAt(index)==line.toUpperCase().charAt(index+1))
+        return extractLetters(line,index+1,result);
+    else
+        return extractLetters(line,index+1,result+line.charAt(index));
+}
